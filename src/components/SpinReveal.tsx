@@ -9,40 +9,6 @@ interface SpinRevealProps {
   placeholder: string;
 }
 
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    position: 'relative',
-    minHeight: '60px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '16px',
-    borderRadius: '16px',
-    background: 'rgba(255, 255, 255, 0.6)',
-    border: '1px solid rgba(125, 184, 125, 0.2)',
-    overflow: 'visible',
-  },
-  placeholder: {
-    fontSize: '15px',
-    color: 'var(--brown)',
-    opacity: 0.5,
-    fontWeight: 500,
-  },
-  spinning: {
-    fontSize: '16px',
-    fontWeight: 700,
-    color: 'var(--green)',
-    animation: 'spin-slot 0.15s ease-in-out infinite',
-  },
-  revealed: {
-    fontSize: '18px',
-    fontWeight: 900,
-    color: 'var(--text)',
-    animation: 'spring-reveal 0.5s ease-out forwards',
-    textAlign: 'center' as const,
-  },
-};
-
 export function SpinReveal({ state, result, spinOptions, placeholder }: SpinRevealProps) {
   const [displayText, setDisplayText] = useState('');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -68,16 +34,18 @@ export function SpinReveal({ state, result, spinOptions, placeholder }: SpinReve
   }, [state, spinOptions]);
 
   return (
-    <div style={styles.container}>
+    <div className="reveal-box">
       {state === 'idle' && (
-        <span style={styles.placeholder}>{placeholder}</span>
+        <span className="placeholder-text">{placeholder}</span>
       )}
       {state === 'spinning' && (
-        <span style={styles.spinning}>{displayText}</span>
+        <div className="spinning-container">
+          <span className="spinning-text">{displayText}</span>
+        </div>
       )}
       {state === 'revealed' && (
         <>
-          <span style={styles.revealed}>{result}</span>
+          <span className="revealed-text">{result}</span>
           <SparkleEffect />
         </>
       )}

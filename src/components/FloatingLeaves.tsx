@@ -2,54 +2,34 @@ import { useMemo } from 'react';
 
 const LEAF_EMOJIS = ['🍃', '🌿', '🍂', '🌱', '🐾'];
 
-interface Leaf {
-  id: number;
-  emoji: string;
-  left: string;
-  top: string;
-  size: number;
-  duration: number;
-  delay: number;
-}
-
 export function FloatingLeaves() {
-  const leaves = useMemo<Leaf[]>(() => {
+  const leaves = useMemo(() => {
     return Array.from({ length: 10 }, (_, i) => ({
       id: i,
       emoji: LEAF_EMOJIS[Math.floor(Math.random() * LEAF_EMOJIS.length)],
-      left: `${Math.random() * 90 + 5}%`,
-      top: `${Math.random() * 80 + 10}%`,
-      size: 18 + Math.random() * 16,
+      x: Math.random() * 90 + 5,
+      y: Math.random() * 80 + 10,
       duration: 8 + Math.random() * 12,
       delay: Math.random() * 5,
     }));
   }, []);
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        pointerEvents: 'none',
-        zIndex: 0,
-        overflow: 'hidden',
-      }}
-    >
+    <>
       {leaves.map((leaf) => (
         <span
           key={leaf.id}
+          className="floating-leaf"
           style={{
-            position: 'absolute',
-            left: leaf.left,
-            top: leaf.top,
-            fontSize: `${leaf.size}px`,
-            opacity: 0.15,
-            animation: `float-leaf ${leaf.duration}s ease-in-out ${leaf.delay}s infinite`,
+            left: leaf.x + '%',
+            top: leaf.y + '%',
+            animationDelay: leaf.delay + 's',
+            animationDuration: leaf.duration + 's',
           }}
         >
           {leaf.emoji}
         </span>
       ))}
-    </div>
+    </>
   );
 }
