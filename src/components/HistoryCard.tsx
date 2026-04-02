@@ -3,7 +3,7 @@ import type { SanpoRecord } from '../types';
 
 interface HistoryCardProps {
   record: SanpoRecord;
-  onDelete: (id: string, photoURL: string | null) => void;
+  onDelete: (id: string) => void;
 }
 
 export function HistoryCard({ record, onDelete }: HistoryCardProps) {
@@ -23,10 +23,6 @@ export function HistoryCard({ record, onDelete }: HistoryCardProps) {
         {record.what && <span className="history-tag what">✋ {record.what}</span>}
       </div>
 
-      {record.photoURL && (
-        <img src={record.photoURL} alt="おさんぽの写真" className="history-photo" />
-      )}
-
       {record.memo && <div className="history-memo">{record.memo}</div>}
 
       {confirming ? (
@@ -36,7 +32,7 @@ export function HistoryCard({ record, onDelete }: HistoryCardProps) {
             <button
               style={{padding: '8px 20px', borderRadius: 10, background: 'var(--pink1)', color: 'white', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer'}}
               onClick={() => {
-                onDelete(record.id, record.photoURL);
+                onDelete(record.id);
                 setConfirming(false);
               }}
             >

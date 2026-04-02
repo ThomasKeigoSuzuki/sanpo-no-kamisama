@@ -10,7 +10,6 @@ export interface SanpoRecord {
   userId: string;
   where: string | null;
   what: string | null;
-  photoURL: string | null;
   memo: string;
   createdAt: Date;
 }

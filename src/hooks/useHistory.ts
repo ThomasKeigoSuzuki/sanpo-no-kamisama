@@ -10,8 +10,7 @@ import {
   doc,
   serverTimestamp,
 } from 'firebase/firestore';
-import { ref, deleteObject } from 'firebase/storage';
-import { db, storage, isConfigured } from '../firebase';
+import { db, isConfigured } from '../firebase';
 import type { SanpoRecord } from '../types';
 
 export function useHistory(userId: string | undefined) {
@@ -38,7 +37,6 @@ export function useHistory(userId: string | undefined) {
           userId: data.userId,
           where: data.where ?? null,
           what: data.what ?? null,
-          photoURL: data.photoURL ?? null,
           memo: data.memo ?? '',
           createdAt: data.createdAt?.toDate?.() ?? new Date(),
         };
@@ -54,7 +52,6 @@ export function useHistory(userId: string | undefined) {
   const addRecord = async (data: {
     where: string | null;
     what: string | null;
-    photoURL: string | null;
     memo: string;
   }) => {
     if (!userId || !db) return;
@@ -64,7 +61,6 @@ export function useHistory(userId: string | undefined) {
         userId,
         where: data.where,
         what: data.what,
-        photoURL: data.photoURL,
         memo: data.memo,
         createdAt: serverTimestamp(),
       });
@@ -75,17 +71,9 @@ export function useHistory(userId: string | undefined) {
     }
   };
 
-  const deleteRecord = async (id: string, photoURL: string | null) => {
+  const deleteRecord = async (id: string) => {
     if (!db) return;
     try {
-      if (photoURL && storage) {
-        try {
-          const photoRef = ref(storage, photoURL);
-          await deleteObject(photoRef);
-        } catch {
-          // Photo may already be deleted
-        }
-      }
       await deleteDoc(doc(db, 'sanpo_records', id));
     } catch (error) {
       console.error('Delete record error:', error);
